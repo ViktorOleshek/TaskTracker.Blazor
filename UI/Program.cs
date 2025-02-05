@@ -3,13 +3,25 @@ using UI.Extensions;
 using Refit;
 using Microsoft.Extensions.Options;
 using MudBlazor.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using UI;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "auth_token";
+        options.LoginPath = "/login";
+        options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
+        options.AccessDeniedPath = "/access-denied";
+    });
+builder.Services.AddAuthorization();
+builder.Services.AddCascadingAuthenticationState();
 
-//builder.Services.AddOptions<TaskTrackerSettings>()
-//    .BindConfiguration(TaskTrackerSettings.ConfigurationSection)
-//    .ValidateDataAnnotations()
-//    .ValidateOnStart();
+builder.Services.AddOptions<TaskTrackerSettings>()
+    .BindConfiguration(TaskTrackerSettings.ConfigurationSection)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 builder.Services.AddApi(builder.Configuration);
 builder.Services.AddMudServices();
@@ -31,10 +43,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseAntiforgery();
-//app.UseAuthentication();
-//app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()

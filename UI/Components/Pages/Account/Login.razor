@@ -1,0 +1,54 @@
+﻿@page "/login"
+
+@using Domain.Models.Account
+@using Services.Abstraction
+@inject IAuthService AuthService
+@using MudBlazor
+@inject NavigationManager NavigationManager
+
+<MudPaper Class="pa-4" MaxWidth="xs">
+    <MudText Typo="Typo.h6" Align="Align.Center">Login</MudText>
+
+    <EditForm Model="@loginModel" OnValidSubmit="@HandleLogin">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <MudTextField @bind-Value="loginModel.Login" Label="Login" Variant="Variant.Outlined" Margin="Margin.Normal" />
+        <MudTextField @bind-Value="loginModel.Password" Label="Password" Variant="Variant.Outlined" Margin="Margin.Normal" InputType="InputType.Password" />
+
+        <MudButton Type="Submit" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" @onclick="HandleLogin">Login</MudButton>
+    </EditForm>
+
+    @if (errorMessage != null)
+    {
+        <MudAlert Color="Color.Error" Icon="Icons.Material.Filled.Error" Class="mt-4">
+            @errorMessage
+        </MudAlert>
+    }
+</MudPaper>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+    private string? errorMessage;
+    private bool isSubmitting = false;
+
+    private async Task HandleLogin()
+    {
+        isSubmitting = true;
+
+        var response = await AuthService.LoginAsync(loginModel);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var loginResponse = response.Content;
+            Console.WriteLine($"Успішний вхід! Токен: {loginResponse.Token.Token}");
+            NavigationManager.NavigateTo("/dashboard");
+        }
+        else
+        {
+            errorMessage = "Невірні дані, спробуйте ще раз.";
+        }
+
+        isSubmitting = false;
+    }
+}
