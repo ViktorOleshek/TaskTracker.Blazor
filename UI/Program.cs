@@ -1,6 +1,19 @@
 using UI.Components;
+using UI.Extensions;
+using Refit;
+using Microsoft.Extensions.Options;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.Services.AddOptions<TaskTrackerSettings>()
+//    .BindConfiguration(TaskTrackerSettings.ConfigurationSection)
+//    .ValidateDataAnnotations()
+//    .ValidateOnStart();
+
+builder.Services.AddApi(builder.Configuration);
+builder.Services.AddMudServices();
+
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -20,6 +33,8 @@ app.UseHttpsRedirection();
 
 
 app.UseAntiforgery();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
