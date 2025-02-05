@@ -17,4 +17,9 @@
     <ProjectReference Include="..\Services.Abstraction\Services.Abstraction.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\Pages\Settings\" />
+    <Folder Include="Components\Pages\Projects\" />
+  </ItemGroup>
+
 </Project>

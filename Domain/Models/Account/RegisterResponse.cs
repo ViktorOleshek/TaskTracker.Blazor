@@ -2,6 +2,6 @@
 
 public class RegisterResponse
 {
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
     public TokenModel Token { get; set; } = new TokenModel();
 }
