@@ -1,0 +1,68 @@
+﻿@page "/login"
+
+@using Domain.Models.Account
+@using Services.Abstraction
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@using MudBlazor
+
+<div class="d-flex justify-center">
+    <MudCard Width="500px">
+        <MudCardHeader>
+            <MudText Typo="Typo.h5" Align="Align.Center">Login</MudText>
+        </MudCardHeader>
+
+        <MudForm Model="loginModel" Validation="loginModelValidation.ValidateValue">
+            <MudCardContent>
+                <MudTextField @bind-Value="loginModel.Login" For="@(() => loginModel.Login)" Label="Login" Required="true" Immediate="true" FullWidth="true"></MudTextField>
+                <MudTextField @bind-Value="loginModel.Password" For="@(() => loginModel.Password)" Label="Password" InputType="InputType.Password" Required="true" Immediate="true" FullWidth="true"></MudTextField>
+            </MudCardContent>
+
+            <MudCardActions>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" FullWidth="true" Disabled="isSubmitting">
+                    @if (isSubmitting)
+                    {
+                        <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+                    }
+                    else
+                    {
+                        <text>Login</text>
+                    }
+                </MudButton>
+            </MudCardActions>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <MudAlert Severity="Severity.Error" Dense="true" Elevation="0" Class="mt-4">@errorMessage</MudAlert>
+            }
+        </MudForm>
+    </MudCard>
+</div>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+    private LoginModelValidation loginModelValidation = new LoginModelValidation();
+    private string? errorMessage;
+    private bool isSubmitting = false;
+
+    private async Task HandleLogin()
+    {
+        isSubmitting = true;
+        errorMessage = null;
+
+        var response = await AuthService.LoginAsync(loginModel);
+
+        if (response.IsSuccessStatusCode && response.Content is not null)
+        {
+            var loginResponse = response.Content;
+            Console.WriteLine($"Successful login! Token: {loginResponse.Token}");
+            NavigationManager.NavigateTo("/dashboard");
+        }
+        else
+        {
+            errorMessage = "Invalid data, please try again.";
+        }
+
+        isSubmitting = false;
+    }
+}

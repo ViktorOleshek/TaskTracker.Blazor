@@ -1,5 +1,15 @@
 ﻿@inherits LayoutComponentBase
 
+@* dark/white theme *@
+<MudThemeProvider />
+@* pop-up window *@
+<MudPopoverProvider /> 
+@* Needed for dialog windows *@
+<MudDialogProvider />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -8,6 +18,8 @@
     <main>
         <div class="top-row px-4">
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <MudNavLink Href="/login" Class="ml-4">Login</MudNavLink>
+            <MudNavLink Href="/register" Class="ml-4">Register</MudNavLink>
         </div>
 
         <article class="content px-4">
