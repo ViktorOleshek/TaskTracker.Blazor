@@ -1,5 +1,6 @@
 ﻿using Refit;
 using Services.Abstraction;
+using Services.ExternalApi;
 
 namespace UI.Extensions;
 
