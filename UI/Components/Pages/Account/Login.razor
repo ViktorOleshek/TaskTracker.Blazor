@@ -1,7 +1,7 @@
 ﻿@page "/login"
 
 @using Domain.Models.Account
-@using Services.Abstraction
+@using Services.ExternalApi
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
 @using MudBlazor
@@ -52,10 +52,9 @@
 
 		var response = await AuthService.LoginAsync(loginModel);
 
-		if (response.IsSuccessStatusCode && response.Content is not null)
+		if (response.IsSuccessStatusCode)
 		{
-			var loginResponse = response.Content;
-			Console.WriteLine($"Successful login! Token: {loginResponse.Token}");
+			Console.WriteLine("Login successful!");
 			NavigationManager.NavigateTo("/dashboard");
 		}
 		else
