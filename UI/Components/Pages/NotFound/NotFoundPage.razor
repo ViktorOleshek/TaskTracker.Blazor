@@ -1,0 +1,24 @@
+﻿@page "/not-found"
+@using MudBlazor
+@inject NavigationManager NavigationManager
+
+<MudContainer Class="d-flex flex-column align-center justify-center" Style="height: 100vh;">
+    <MudCard Width="400px" Class="pa-4">
+	    <MudCardHeader Class="d-flex justify-center ">
+            <MudText Typo="Typo.h4" Align="Align.Center">Page Not Found</MudText>
+        </MudCardHeader>
+        <MudCardContent Class="text-center">
+            <MudText Typo="Typo.body1">The page you are looking for does not exist.</MudText>
+        </MudCardContent>
+        <MudCardActions Class="d-flex justify-center">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@GoHome">Go to Home</MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudContainer>
+
+@code {
+    private void GoHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}
