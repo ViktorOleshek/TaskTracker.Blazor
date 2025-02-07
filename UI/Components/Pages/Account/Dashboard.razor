@@ -1,0 +1,30 @@
+﻿@page "/dashboard"
+@using Domain.DTOs
+@using Services.ExternalApi
+
+<h3>Dashboard</h3>
+@if (currentUser is not null)
+{
+    <p>Welcome</p>  
+    <p>id: @currentUser.Id!</p>
+}
+else
+{
+    <p>Please log in</p>
+}
+
+
+@inject IAuthService AuthService
+
+@code {
+    private UserDto? currentUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await AuthService.GetCurrentUserAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            currentUser = response.Content;
+        }
+    }
+}

@@ -1,7 +1,9 @@
 ﻿@page "/login"
 
+@rendermode InteractiveServer
+
 @using Domain.Models.Account
-@using Services.Abstraction
+@using Services.ExternalApi
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
 @using MudBlazor
@@ -11,10 +13,12 @@
 		<MudText Typo="Typo.h6">Login</MudText>
 	</MudCardHeader>
 
-	<MudForm Model="@loginModel" Validation="loginModelValidation.ValidateValue">
+	<MudForm Model="@loginModel" Validation="loginModelValidation.ValidateValue" @ref="loginForm">
 		<MudCardContent>
-			<MudTextField @bind-Value="loginModel.Login" For="@(() => loginModel.Login)" Label="Login" Variant="Variant.Outlined" Margin="Margin.Normal" Required="true" />
-			<MudTextField @bind-Value="loginModel.Password" For="@(() => loginModel.Password)" Label="Password" Variant="Variant.Outlined" Margin="Margin.Normal" InputType="InputType.Password" Required="true" />
+			<MudTextField @bind-Value="loginModel.Login" For="@(() => loginModel.Login)" Label="Login" 
+				Variant="Variant.Outlined" Margin="Margin.Normal" Required="true" />
+			<MudTextField @bind-Value="loginModel.Password" For="@(() => loginModel.Password)" Label="Password" 
+				Variant="Variant.Outlined" Margin="Margin.Normal" InputType="InputType.Password" Required="true" />
 		</MudCardContent>
 
 		<MudCardActions>
@@ -38,31 +42,3 @@
 		}
 	</MudForm>
 </MudPaper>
-
-@code {
-	private LoginModel loginModel = new LoginModel();
-	private LoginModelValidation loginModelValidation = new LoginModelValidation();
-	private string? errorMessage;
-	private bool isSubmitting = false;
-
-	private async Task HandleLogin()
-	{
-		isSubmitting = true;
-		errorMessage = null;
-
-		var response = await AuthService.LoginAsync(loginModel);
-
-		if (response.IsSuccessStatusCode && response.Content is not null)
-		{
-			var loginResponse = response.Content;
-			Console.WriteLine($"Successful login! Token: {loginResponse.Token}");
-			NavigationManager.NavigateTo("/dashboard");
-		}
-		else
-		{
-			errorMessage = "Invalid data, please try again.";
-		}
-
-		isSubmitting = false;
-	}
-}
