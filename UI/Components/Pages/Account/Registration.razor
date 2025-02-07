@@ -17,7 +17,7 @@
 				<MudText Typo="Typo.h6">Account Registration</MudText>
 			</MudCardHeader>
 
-			<MudForm Model="model" Validation="registerModelValidation.ValidateValue">
+			<MudForm Model="model" Validation="registerModelValidation.ValidateValue" @ref="registractionForm">
 				<MudCardContent>
 					<MudTextField @bind-Value="model.Login" For="@(() => model.Login)" Immediate="true" Label="Fullname" Required="true"></MudTextField>
 					<MudTextField @bind-Value="model.Email" For="@(() => model.Email)" Immediate="true" Label="Email Address" InputType="InputType.Email" Required="true"></MudTextField>

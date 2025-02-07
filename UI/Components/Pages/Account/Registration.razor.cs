@@ -1,5 +1,6 @@
 ﻿using Domain.Models.Account;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace UI.Components.Pages.Account;
 
@@ -7,14 +8,29 @@ public partial class Registration : ComponentBase
 {
     RegisterModel model = new();
     RegisterModelValidation registerModelValidation = new();
-
     private string? errorMessage;
     private bool isSubmitting = false;
+    private MudForm? registractionForm;
 
+    private async Task<bool> ValidateFormAsync()
+    {
+        if (registractionForm is not null)
+        {
+            await registractionForm.Validate();
+            return registractionForm.IsValid;
+        }
+        return false;
+    }
     private async Task HandleRegister()
     {
-        isSubmitting = true;
         errorMessage = null;
+
+        if (!await ValidateFormAsync())
+        {
+            return;
+        }
+
+        isSubmitting = true;
 
         var response = await AuthService.RegisterAsync(model);
 
