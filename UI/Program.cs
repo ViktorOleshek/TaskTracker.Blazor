@@ -42,15 +42,13 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-//app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();
 
-//app.MapBlazorHub();
-//app.MapFallback(() => Results.Redirect("/not-found"));
+app.MapFallback(() => Results.Redirect("/not-found"));
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
