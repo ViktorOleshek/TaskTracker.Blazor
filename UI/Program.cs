@@ -1,18 +1,17 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using MudBlazor.Services;
+using UI;
 using UI.Components;
 using UI.Extensions;
-using Refit;
-using Microsoft.Extensions.Options;
-using MudBlazor.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using UI;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.Cookie.Name = "auth_token";
+        options.Cookie.Name = "AuthToken";
         options.LoginPath = "/login";
-        options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
+        options.Cookie.MaxAge = TimeSpan.FromHours(5);
+        options.Cookie.HttpOnly = true;
         options.AccessDeniedPath = "/access-denied";
     });
 builder.Services.AddAuthorization();
