@@ -1,4 +1,4 @@
-﻿using Domain.Models.Account;
+﻿using Domain.Models.Account.Login;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -37,7 +37,7 @@ public partial class Login : ComponentBase
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("Login successful!");
-            NavigationManager.NavigateTo("/dashboard");
+            NavigationManager.NavigateTo("/profile");
         }
         else
         {

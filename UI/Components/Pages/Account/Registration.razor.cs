@@ -1,4 +1,4 @@
-﻿using Domain.Models.Account;
+﻿using Domain.Models.Account.Registration;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -37,7 +37,7 @@ public partial class Registration : ComponentBase
         if (response.IsSuccessStatusCode && response.Content is not null)
         {
             Console.WriteLine($"Successful registration! Token: {response.Content.Token.Token}");
-            NavigationManager.NavigateTo("/dashboard");
+            NavigationManager.NavigateTo("/profile");
         }
         else
         {

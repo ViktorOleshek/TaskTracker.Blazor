@@ -1,0 +1,62 @@
+﻿@page "/profile"
+
+@rendermode InteractiveServer
+
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
+@using Domain.DTOs
+@using Domain.DTOs.Users.ChangePassword
+@using Services.Abstraction
+
+<MudContainer MaxWidth="MaxWidth.Medium">
+	<MudCard Class="pa-6">
+		<MudCardHeader>
+			<MudText Typo="Typo.h4">@user?.Login</MudText>
+		</MudCardHeader>
+		<MudCardContent>
+			<MudText Typo="Typo.body1">Email: @user?.Email</MudText>
+			<MudDivider Class="my-4" />
+			<MudExpansionPanels>
+				<MudExpansionPanel Text="Change Password">
+					<MudTextField Label="Current Password" InputType="InputType.Password" @bind-Value="changePasswordModel.OldPassword" Required="true" />
+					<MudTextField Label="New Password" InputType="InputType.Password" @bind-Value="changePasswordModel.NewPassword" Required="true" />
+					<MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="ChangePassword">Save</MudButton>
+				</MudExpansionPanel>
+			</MudExpansionPanels>
+			@if (!string.IsNullOrEmpty(errorMessage))
+			{
+				<MudAlert Severity="Severity.Error">@errorMessage</MudAlert>
+			}
+		</MudCardContent>
+	</MudCard>
+</MudContainer>
+
+@code {
+	private GetUserDto? user;
+	private ChangePasswordDTO changePasswordModel = new();
+	private string newEmail = string.Empty;
+	private string? errorMessage;
+
+	protected override async Task OnInitializedAsync()
+	{
+		var response = await UserService.GetCurrentUserAsync();
+		if (response.IsSuccessStatusCode && response.Content is not null)
+		{
+			user = response.Content;
+		}
+	}
+
+	private async Task ChangePassword()
+	{
+		var response = await UserService.ChangePasswordAsync(changePasswordModel);
+		if (!response.IsSuccessStatusCode)
+		{
+			errorMessage = "Failed to change password.";
+		}
+	}
+
+	private async Task ChangeEmail()
+	{
+		// Implement email change logic if required
+	}
+}
