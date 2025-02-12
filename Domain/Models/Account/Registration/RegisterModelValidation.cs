@@ -1,7 +1,7 @@
 ﻿using Domain.Extensions;
 using FluentValidation;
 
-namespace Domain.Models.Account;
+namespace Domain.Models.Account.Registration;
 
 public class RegisterModelValidation : AbstractValidator<RegisterModel>
 {
