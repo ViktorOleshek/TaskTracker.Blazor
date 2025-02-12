@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Domain.Extensions;
+using FluentValidation;
 
 namespace Domain.Models.Account;
 
@@ -7,18 +8,13 @@ public class RegisterModelValidation : AbstractValidator<RegisterModel>
     public RegisterModelValidation()
     {
         RuleFor(x => x.Login).NotEmpty();
-        RuleFor(x => x.Email).NotEmpty();
+        RuleFor(x => x.Email).ApplyEmailRules();
 
-        RuleFor(x => x.Password)
-            .NotEmpty()
-            .MinimumLength(5).MaximumLength(10)
-            .Matches(@"[A-Z]+").Matches(@"[a-z]+")
-            .Matches(@"[0-9]+").Matches(@"[\@\!\?\.\*]+");
+        RuleFor(x => x.Password).ApplyPasswordRules();
 
         RuleFor(x => x.ConfirmPassword)
-            .NotEmpty()
-            .Equal(x => x.Password)
-            .WithMessage("Passwords do not match.");
+            .ApplyPasswordRules()
+            .Equal(x => x.Password).WithMessage("Passwords do not match.");
     }
 
     public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
