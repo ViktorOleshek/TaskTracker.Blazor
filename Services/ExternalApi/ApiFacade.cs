@@ -1,5 +1,4 @@
-﻿using Refit;
-using Services.Abstraction;
+﻿using Services.Abstraction;
 
 namespace Services.ExternalApi;
 

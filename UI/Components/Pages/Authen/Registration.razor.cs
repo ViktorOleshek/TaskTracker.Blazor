@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace UI.Components.Pages.Account;
+namespace UI.Components.Pages.Authen;
 
 public partial class Registration : ComponentBase
 {

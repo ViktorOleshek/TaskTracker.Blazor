@@ -2,7 +2,7 @@
 
 @rendermode InteractiveServer
 
-@using Domain.Models.Account
+@using Domain.Models.Account.Login
 @using Services.ExternalApi
 @inject IApiFacade ApiFacade
 @inject NavigationManager NavigationManager
@@ -14,10 +14,10 @@
 
 	<MudForm Model="@loginModel" Validation="loginModelValidation.ValidateValue" @ref="loginForm">
 		<MudCardContent>
-			<MudTextField @bind-Value="loginModel.Login" For="@(() => loginModel.Login)" Label="Login" 
-				Variant="Variant.Outlined" Margin="Margin.Normal" Required="true" />
-			<MudTextField @bind-Value="loginModel.Password" For="@(() => loginModel.Password)" Label="Password" 
-				Variant="Variant.Outlined" Margin="Margin.Normal" InputType="InputType.Password" Required="true" />
+			<MudTextField @bind-Value="loginModel.Login" For="@(() => loginModel.Login)" Label="Login"
+						  Variant="Variant.Outlined" Margin="Margin.Normal" Required="true" />
+			<MudTextField @bind-Value="loginModel.Password" For="@(() => loginModel.Password)" Label="Password"
+						  Variant="Variant.Outlined" Margin="Margin.Normal" InputType="InputType.Password" Required="true" />
 		</MudCardContent>
 
 		<MudCardActions>
