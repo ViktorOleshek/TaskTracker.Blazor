@@ -1,6 +1,7 @@
 ﻿using Domain.Models.Account.Login;
 using Domain.Models.Account.Registration;
 using Refit;
+using Services.Abstraction;
 
 namespace Services.ExternalApi;
 

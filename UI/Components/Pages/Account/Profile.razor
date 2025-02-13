@@ -2,11 +2,12 @@
 
 @rendermode InteractiveServer
 
-@inject IUserService UserService
+@inject IApiFacade ApiFacade
 @inject NavigationManager NavigationManager
 @using Domain.DTOs
 @using Domain.DTOs.Users.ChangePassword
 @using Services.Abstraction
+@using Services.ExternalApi
 
 <MudContainer MaxWidth="MaxWidth.Medium">
 	<MudCard Class="pa-6">
@@ -39,7 +40,7 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		var response = await UserService.GetCurrentUserAsync();
+		var response = await ApiFacade.User.GetCurrentUserAsync();
 		if (response.IsSuccessStatusCode && response.Content is not null)
 		{
 			user = response.Content;
@@ -48,7 +49,7 @@
 
 	private async Task ChangePassword()
 	{
-		var response = await UserService.ChangePasswordAsync(changePasswordModel);
+		var response = await ApiFacade.User.ChangePasswordAsync(changePasswordModel);
 		if (!response.IsSuccessStatusCode)
 		{
 			errorMessage = "Failed to change password.";

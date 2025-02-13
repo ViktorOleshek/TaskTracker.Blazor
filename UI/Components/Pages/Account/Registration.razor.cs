@@ -32,7 +32,7 @@ public partial class Registration : ComponentBase
 
         isSubmitting = true;
 
-        var response = await AuthService.RegisterAsync(model);
+        var response = await ApiFacade.Auth.RegisterAsync(model);
 
         if (response.IsSuccessStatusCode && response.Content is not null)
         {

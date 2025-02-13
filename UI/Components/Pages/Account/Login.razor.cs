@@ -32,7 +32,7 @@ public partial class Login : ComponentBase
 
         isSubmitting = true;
 
-        var response = await AuthService.LoginAsync(loginModel);
+        var response = await ApiFacade.Auth.LoginAsync(loginModel);
 
         if (response.IsSuccessStatusCode)
         {
