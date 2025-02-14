@@ -1,6 +1,4 @@
-﻿using Services.Abstraction;
-
-namespace Services.ExternalApi;
+﻿namespace Services.ExternalApi;
 
 public class ApiFacade : IApiFacade
 {
