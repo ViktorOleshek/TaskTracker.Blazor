@@ -3,9 +3,6 @@
 @using Domain.DTOs
 @using Domain.DTOs.Users.ChangePassword
 @using Services.ExternalApi
-@inject IApiFacade ApiFacade
-@inject NavigationManager NavigationManager
-@inject IDialogService DialogService
 
 <MudContainer MaxWidth="MaxWidth.Medium">
     <MudCard Class="pa-6">
@@ -31,54 +28,3 @@
         </MudCardContent>
     </MudCard>
 </MudContainer>
-
-@code {
-    private GetUserDto? user;
-    private string? errorMessage;
-
-    private readonly DialogOptions defaultOptions = new()
-    {
-        CloseButton = true,
-        CloseOnEscapeKey = true,
-        MaxWidth = MaxWidth.Small,
-        FullWidth = true
-    };
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadUserData();
-    }
-
-    private async Task LoadUserData()
-    {
-        var response = await ApiFacade.User.GetCurrentUserAsync();
-        if (response.IsSuccessStatusCode && response.Content is not null)
-        {
-            user = response.Content;
-        }
-    }
-
-    private async Task ShowDialog<TDialog>(string title) where TDialog : ComponentBase
-    {
-        var type = title.ToLower();
-        var dialog = await DialogService.ShowAsync<TDialog>($"Change {type}", defaultOptions);
-        var result = await dialog.Result;
-
-        if (result.Canceled)
-        {
-            errorMessage = $"Failed to change {type}";
-            return;
-        }
-
-        errorMessage = null;
-        await DialogService.ShowMessageBox(
-            "Success",
-            $"{title} changed successfully!",
-            yesText: "OK");
-
-        if (title == "Email")
-        {
-            await LoadUserData();
-        }
-    }
-}

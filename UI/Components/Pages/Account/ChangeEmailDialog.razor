@@ -1,36 +1,16 @@
 ﻿@using Services.ExternalApi
 
 <MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h4">Change email</MudText>
+    </TitleContent>
+
     <DialogContent>
-        <MudText>Change Email</MudText>
         <MudTextField Label="New Email" @bind-Value="newEmail" Required="true" />
     </DialogContent>
+
     <DialogActions>
         <MudButton OnClick="Submit" Color="Color.Primary">Save</MudButton>
         <MudButton OnClick="Cancel" Color="Color.Secondary">Cancel</MudButton>
     </DialogActions>
 </MudDialog>
-
-@code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
-    [Inject]
-    public required IApiFacade ApiFacade { get; set; }
-
-    private string newEmail = string.Empty;
-
-    private async Task Submit()
-    {
-        var response = await ApiFacade.User.ChangeEmailAsync(newEmail);
-        if (response.IsSuccessStatusCode)
-        {
-            MudDialog?.Close(DialogResult.Ok(true));
-        }
-        else
-        {
-            MudDialog?.Close(DialogResult.Cancel());
-        }
-    }
-
-    private void Cancel() => MudDialog?.Cancel();
-}
