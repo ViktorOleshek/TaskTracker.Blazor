@@ -44,19 +44,23 @@ public partial class Profile
 
         if (result.Canceled)
         {
-            errorMessage = $"Failed to change {type}";
             return;
         }
 
-        errorMessage = null;
-        await DialogService.ShowMessageBox(
-            "Success",
-            $"{title} changed successfully!",
-            yesText: "OK");
-
-        if (title == "Email")
+        if (result.Data is bool success && success)
         {
-            await LoadUserData();
+            errorMessage = null;
+            await DialogService.ShowMessageBox(
+                "Success",
+                $"{title} changed successfully!",
+                yesText: "OK");
+
+            if (title == "Email")
+            {
+                await LoadUserData();
+            }
         }
+
+        errorMessage = $"Failed to change {type}";
     }
 }

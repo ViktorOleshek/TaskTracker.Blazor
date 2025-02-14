@@ -21,10 +21,8 @@ public partial class ChangeEmailDialog
         {
             MudDialog?.Close(DialogResult.Ok(true));
         }
-        else
-        {
-            MudDialog?.Close(DialogResult.Cancel());
-        }
+
+        MudDialog?.Close(DialogResult.Ok(false));
     }
 
     private void Cancel() => MudDialog?.Cancel();
