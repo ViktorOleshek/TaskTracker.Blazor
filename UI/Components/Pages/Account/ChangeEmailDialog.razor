@@ -1,16 +1,16 @@
 ﻿@using Services.ExternalApi
 
-<MudDialog>
+<MudDialog >
     <TitleContent>
         <MudText Typo="Typo.h4">Change email</MudText>
     </TitleContent>
 
     <DialogContent>
-        <MudTextField Label="New Email" @bind-Value="newEmail" Required="true" />
+        <MudTextField Label="New Email" @bind-Value=@newEmail Required="true" />
     </DialogContent>
 
     <DialogActions>
-        <MudButton OnClick="Submit" Color="Color.Primary">Save</MudButton>
-        <MudButton OnClick="Cancel" Color="Color.Secondary">Cancel</MudButton>
+        <MudButton ButtonType=@ButtonType.Button OnClick=@Submit Color=@Color.Primary>Save</MudButton>
+        <MudButton ButtonType=@ButtonType.Button OnClick=@Cancel Color=@Color.Secondary>Cancel</MudButton>
     </DialogActions>
 </MudDialog>
