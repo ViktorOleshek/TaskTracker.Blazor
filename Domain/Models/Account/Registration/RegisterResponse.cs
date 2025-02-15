@@ -1,4 +1,4 @@
-﻿namespace Domain.Models.Account;
+﻿namespace Domain.Models.Account.Registration;
 
 public class RegisterResponse
 {

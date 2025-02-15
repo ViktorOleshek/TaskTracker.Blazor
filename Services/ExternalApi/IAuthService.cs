@@ -1,5 +1,5 @@
-﻿using Domain.DTOs;
-using Domain.Models.Account;
+﻿using Domain.Models.Account.Login;
+using Domain.Models.Account.Registration;
 using Refit;
 
 namespace Services.ExternalApi;
@@ -7,11 +7,8 @@ namespace Services.ExternalApi;
 public interface IAuthService
 {
     [Post("/identity/login")]
-    Task<ApiResponse<LoginResponse>> LoginAsync([Body] LoginModel model);
+    Task<IApiResponse<LoginResponse>> LoginAsync([Body] LoginModel model);
 
     [Post("/identity/register")]
-    Task<ApiResponse<RegisterResponse>> RegisterAsync([Body] RegisterModel model);
-
-    [Get("/user/current-user")]
-    Task<ApiResponse<UserDto>> GetCurrentUserAsync();
+    Task<IApiResponse<RegisterResponse>> RegisterAsync([Body] RegisterModel model);
 }

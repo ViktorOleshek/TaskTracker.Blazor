@@ -1,8 +1,8 @@
-﻿using Domain.Models.Account;
+﻿using Domain.Models.Account.Registration;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace UI.Components.Pages.Account;
+namespace UI.Components.Pages.Authen;
 
 public partial class Registration : ComponentBase
 {
@@ -32,12 +32,12 @@ public partial class Registration : ComponentBase
 
         isSubmitting = true;
 
-        var response = await AuthService.RegisterAsync(model);
+        var response = await ApiFacade.Auth.RegisterAsync(model);
 
         if (response.IsSuccessStatusCode && response.Content is not null)
         {
             Console.WriteLine($"Successful registration! Token: {response.Content.Token.Token}");
-            NavigationManager.NavigateTo("/dashboard");
+            NavigationManager.NavigateTo("/profile");
         }
         else
         {

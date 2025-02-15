@@ -1,0 +1,57 @@
+﻿@page "/register"
+
+@rendermode InteractiveServer
+
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+@using Domain.Models.Account
+@using Services.ExternalApi
+@inject IApiFacade ApiFacade
+@inject NavigationManager NavigationManager
+@using MudBlazor
+
+<div class="row">
+	<div class="ma-6 d-flex justify-center">
+		<MudCard Width="500px">
+			<MudCardHeader Class="d-flex justify-center ">
+				<MudText Typo=@Typo.h6>Account Registration</MudText>
+			</MudCardHeader>
+
+			<MudForm Model=@model Validation=@registerModelValidation.ValidateValue @ref=@registractionForm>
+				<MudCardContent>
+					<MudTextField @bind-Value=@model.Login For="@(() => model.Login)" Immediate="true"
+								  Label="Fullname" Required="true">
+					</MudTextField>
+					<MudTextField @bind-Value=@model.Email For="@(() => model.Email)" Immediate="true"
+								  Label="Email Address" InputType=@InputType.Email Required="true">
+					</MudTextField>
+					<MudTextField @bind-Value=@model.Password For="@(() => model.Password)" Immediate="true"
+								  Label="Password" InputType=@InputType.Password Required="true">
+					</MudTextField>
+					<MudTextField @bind-Value=@model.ConfirmPassword For="@(() => model.ConfirmPassword)" Immediate="true"
+								  Label="Confirm Password" InputType=@InputType.Password Required="true">
+					</MudTextField>
+				</MudCardContent>
+
+				<MudCardActions>
+					<MudButton Variant=@Variant.Filled Color=@Color.Secondary Class="ml-auto"
+							   ButtonType=@ButtonType.Button OnClick=@HandleRegister Disabled=@isSubmitting>
+						@if (isSubmitting)
+						{
+							<MudProgressCircular Size=@Size.Small Indeterminate="true" />
+						}
+						else
+						{
+							<text>Register</text>
+						}
+					</MudButton>
+				</MudCardActions>
+
+				@if (!string.IsNullOrEmpty(errorMessage))
+				{
+					<MudAlert Severity=@Severity.Error Dense="true" Elevation="0">@errorMessage</MudAlert>
+				}
+			</MudForm>
+		</MudCard>
+	</div>
+</div>

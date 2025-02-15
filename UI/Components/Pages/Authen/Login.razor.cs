@@ -1,8 +1,8 @@
-﻿using Domain.Models.Account;
+﻿using Domain.Models.Account.Login;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace UI.Components.Pages.Account;
+namespace UI.Components.Pages.Authen;
 
 public partial class Login : ComponentBase
 {
@@ -32,12 +32,12 @@ public partial class Login : ComponentBase
 
         isSubmitting = true;
 
-        var response = await AuthService.LoginAsync(loginModel);
+        var response = await ApiFacade.Auth.LoginAsync(loginModel);
 
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("Login successful!");
-            NavigationManager.NavigateTo("/dashboard");
+            NavigationManager.NavigateTo("/profile");
         }
         else
         {

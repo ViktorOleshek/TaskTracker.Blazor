@@ -1,5 +1,4 @@
 ﻿using Refit;
-using Services.Abstraction;
 using Services.ExternalApi;
 
 namespace UI.Extensions;
@@ -11,13 +10,26 @@ public static class ServiceCollectionExtensions
         var settings = configuration.GetSection(TaskTrackerSettings.ConfigurationSection)
             .Get<TaskTrackerSettings>();
 
-        var types = new [] { typeof(IUserService), typeof(IAuthService) };
-
-        foreach (var type in types)
+        services.AddHttpClient("TaskTrackerApi", client =>
         {
-            services.AddRefitClient(type)
-                .ConfigureHttpClient(httpClient => httpClient.BaseAddress = new Uri(settings!.BaseAddress));
-        }
+            client.BaseAddress = new Uri(settings!.BaseAddress);
+        });
+
+        services.AddScoped<IAuthService>(sp =>
+        {
+            var httpClient = sp.GetRequiredService<IHttpClientFactory>()
+                .CreateClient("TaskTrackerApi");
+            return RestService.For<IAuthService>(httpClient);
+        });
+
+        services.AddScoped<IUserService>(sp =>
+        {
+            var httpClient = sp.GetRequiredService<IHttpClientFactory>()
+                .CreateClient("TaskTrackerApi");
+            return RestService.For<IUserService>(httpClient);
+        });
+
+        services.AddScoped<IApiFacade, ApiFacade>();
 
         return services;
     }
