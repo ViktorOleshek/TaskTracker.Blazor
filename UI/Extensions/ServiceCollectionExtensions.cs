@@ -29,6 +29,13 @@ public static class ServiceCollectionExtensions
             return RestService.For<IUserService>(httpClient);
         });
 
+        services.AddScoped<IProjectService>(sp =>
+        {
+            var httpClient = sp.GetRequiredService<IHttpClientFactory>()
+                .CreateClient("TaskTrackerApi");
+            return RestService.For<IProjectService>(httpClient);
+        });
+
         services.AddScoped<IApiFacade, ApiFacade>();
 
         return services;
