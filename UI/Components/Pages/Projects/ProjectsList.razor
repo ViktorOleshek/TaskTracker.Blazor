@@ -1,17 +1,13 @@
 ﻿@page "/projects"
 @rendermode InteractiveServer
 
-@using Domain.DTOs.Projects;
-@using Services.ExternalApi;
-@using MudBlazor;
-
 <MudContainer>
     <MudCard>
         <MudCardHeader>
-            <MudText Typo="Typo.h4">Projects</MudText>
+            <MudText Typo=@Typo.h4>Projects</MudText>
             <MudSpacer />
-            <MudButton Color="Color.Primary" OnClick="OpenAddProjectDialog">
-                <MudIcon Icon="@Icons.Material.Filled.Add" /> Add Project
+            <MudButton Color=@Color.Primary OnClick=OpenAddProjectDialog>
+                <MudIcon Icon=@Icons.Material.Filled.Add /> Add Project
             </MudButton>
         </MudCardHeader>
         <MudCardContent>
@@ -27,8 +23,9 @@
                     <MudTd>@project.StartDate.ToShortDateString()</MudTd>
                     <MudTd>@(project.FinishDate?.ToShortDateString() ?? "Ongoing")</MudTd>
                     <MudTd>
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" OnClick="() => EditProject(project)" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => DeleteProject(project.ProjectId)" />
+                        <MudIconButton Icon=@Icons.Material.Filled.Info Color=@Color.Primary OnClick="() => InfoProject(project.ProjectId)" />
+                        <MudIconButton Icon=@Icons.Material.Filled.Edit Color=@Color.Primary OnClick="() => EditProject(project)" />
+                        <MudIconButton Icon=@Icons.Material.Filled.Delete Color=@Color.Error OnClick="() => DeleteProject(project.ProjectId)" />
                     </MudTd>
                 </RowTemplate>
             </MudTable>
@@ -36,54 +33,3 @@
         </MudCardContent>
     </MudCard>
 </MudContainer>
-
-@code {
-    [Inject] private IApiFacade ApiFacade { get; set; } = default!;
-    [Inject] private IDialogService DialogService { get; set; } = default!;
-
-    private List<GetUserProjectsResult> projects = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadProjects();
-    }
-
-    private async Task LoadProjects()
-    {
-        var response = await ApiFacade.Project.GetUserProjectsAsync();
-        if (response.IsSuccessStatusCode && response.Content is not null)
-        {
-            projects = response.Content.ToList();
-        }
-    }
-
-    private async Task DeleteProject(Guid projectId)
-    {
-        bool? dialog = await DialogService.ShowMessageBox(
-            title: "Delete Project",
-            message: "Are you sure you want to delete this project?",
-            yesText: "Yes",
-            noText: "No"
-        );
-
-        if (dialog == true)
-        {
-            var response = await ApiFacade.Project.DeleteProjectAsync(projectId);
-            if (response.IsSuccessStatusCode)
-            {
-                projects.RemoveAll(p => p.ProjectId == projectId);
-            }
-        }
-    }
-
-
-    private async Task OpenAddProjectDialog()
-    {
-        // Логіка відкриття діалогу для створення нового проєкту
-    }
-
-    private async Task EditProject(GetUserProjectsResult project)
-    {
-        // Логіка відкриття діалогу редагування проєкту
-    }
-}

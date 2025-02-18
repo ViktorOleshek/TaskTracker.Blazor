@@ -7,6 +7,6 @@ public class GetProjectDetailResult
     public string ProjectDescription { get; set; } = string.Empty;
     public DateTime StartDate { get; set; }
     public DateTime? FinishDate { get; set; }
-    public Guid CreatedBy { get; set; }
+    public string OwnerName { get; set; }
     public int MemberCount { get; set; }
 }

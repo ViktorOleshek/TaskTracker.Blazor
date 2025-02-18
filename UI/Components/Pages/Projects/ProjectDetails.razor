@@ -1,0 +1,27 @@
+﻿@rendermode InteractiveServer
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo=@Typo.h4>Project Details</MudText>
+    </TitleContent>
+
+    <DialogContent>
+        @if (Project != null)
+        {
+            <MudText><b>Name:</b> @Project.ProjectName</MudText>
+            <MudText><b>Description:</b> @Project.ProjectDescription</MudText>
+            <MudText><b>Start Date:</b> @Project.StartDate.ToShortDateString()</MudText>
+            <MudText><b>Finish Date:</b> @(Project.FinishDate?.ToShortDateString() ?? "Ongoing")</MudText>
+            <MudText><b>Owner name:</b> @Project.OwnerName</MudText>
+            <MudText><b>Members:</b> @Project.MemberCount</MudText>
+        }
+        else
+        {
+            <MudProgressCircular Indeterminate="true" />
+        }
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick=@CloseDialog Color=@Color.Primary>Close</MudButton>
+    </DialogActions>
+</MudDialog>
