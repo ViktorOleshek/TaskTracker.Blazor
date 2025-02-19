@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.JsonPatch;
 using MudBlazor;
 using Services.ExternalApi;
-using System.Dynamic;
 
 namespace UI.Components.Pages.Projects;
 
@@ -16,22 +15,23 @@ public partial class ProjectEdit
 
     private ProjectModelValidation Validator = new();
     private MudForm? projectForm;
-    private bool IsValid = false;
-    private string? ErrorMessage;
+    private string? ErrorMessage = null;
 
-    private async Task ValidateForm()
+    private async Task<bool> ValidateFormAsync()
     {
         if (projectForm is not null)
         {
             await projectForm.Validate();
-            IsValid = projectForm.IsValid;
+            return projectForm.IsValid;
         }
+        return false;
     }
 
     private async Task SaveProject()
     {
-        await ValidateForm();
-        if (!IsValid)
+        ErrorMessage = null;
+
+        if (!await ValidateFormAsync())
         {
             ErrorMessage = "Please fix validation errors before saving.";
             return;
