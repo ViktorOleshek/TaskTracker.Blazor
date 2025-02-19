@@ -10,7 +10,7 @@ public partial class ProjectDetails
     [Inject] private IApiFacade ApiFacade { get; set; } = default!;
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
 
-    private GetProjectDetailResult? Project;
+    private ProjectDetailResult? Project;
 
     protected override async Task OnInitializedAsync()
     {

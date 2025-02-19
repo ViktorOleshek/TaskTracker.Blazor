@@ -1,4 +1,4 @@
-﻿using Domain.DTOs.Projects;
+﻿using Domain.Models.Project;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Services.ExternalApi;
@@ -10,7 +10,7 @@ public partial class ProjectsList
     [Inject] private IApiFacade ApiFacade { get; set; } = default!;
     [Inject] private IDialogService DialogService { get; set; } = default!;
 
-    private List<GetUserProjectsResult> projects = new();
+    private List<ProjectModel> projects = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -47,12 +47,28 @@ public partial class ProjectsList
 
     private async Task OpenAddProjectDialog()
     {
-        // Логіка відкриття діалогу для створення нового проєкту
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium };
+        var dialog = DialogService.Show<ProjectEdit>("Add Project", options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await LoadProjects();
+        }
     }
 
-    private async Task EditProject(GetUserProjectsResult project)
+    private async Task EditProject(ProjectModel project)
     {
-        // Логіка відкриття діалогу редагування проєкту
+        var parameters = new DialogParameters { ["Project"] = project };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium };
+
+        var dialog = DialogService.Show<ProjectEdit>("Edit Project", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await LoadProjects();
+        }
     }
 
     private void InfoProject(Guid projectId)

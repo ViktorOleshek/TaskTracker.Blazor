@@ -1,4 +1,6 @@
 ﻿using Domain.DTOs.Projects;
+using Domain.Models.Project;
+using Microsoft.AspNetCore.JsonPatch;
 using Refit;
 
 namespace Services.ExternalApi;
@@ -9,11 +11,14 @@ public interface IProjectService
     Task<IApiResponse<Guid>> CreateProjectAsync([Body] CreateProjectDTO dto);
 
     [Get("/project/user-projects")]
-    Task<IApiResponse<IEnumerable<GetUserProjectsResult>>> GetUserProjectsAsync();
+    Task<IApiResponse<IEnumerable<ProjectModel>>> GetUserProjectsAsync();
 
     [Get("/project/{projectId}")]
-    Task<IApiResponse<GetProjectDetailResult>> GetProjectDetailAsync(Guid projectId);
+    Task<IApiResponse<ProjectDetailResult>> GetProjectDetailAsync(Guid projectId);
 
     [Delete("/project/{projectId}")]
     Task<IApiResponse> DeleteProjectAsync(Guid projectId);
+
+    [Patch("/project/{projectId}")]
+    Task<IApiResponse> UpdateProjectAsync(Guid projectId, [Body] JsonPatchDocument<ProjectModel> patchDoc);
 }
