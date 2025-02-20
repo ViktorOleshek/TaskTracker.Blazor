@@ -45,19 +45,21 @@ public partial class ProjectsList
         }
     }
 
-    private async Task OpenAddProjectDialog()
+    private async Task AddProject()
     {
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium };
-        var dialog = DialogService.Show<ProjectEdit>("Add Project", options);
-        var result = await dialog.Result;
-
-        if (!result.Canceled)
+        var parameters = new DialogParameters
         {
-            await LoadProjects();
-        }
+            ["Project"] = null,
+            ["OnProjectUpdated"] = EventCallback.Factory.Create<ProjectModel>(this, async (_) =>
+            {
+                StateHasChanged();
+            })
+        };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium };
+        var dialog = await DialogService.ShowAsync<ProjectEdit>("Add project", parameters, options);
     }
 
-    private async Task EditProject(ProjectModel project)
+    private async Task EditProject(ProjectModel? project)
     {
         var parameters = new DialogParameters
         {
@@ -68,8 +70,7 @@ public partial class ProjectsList
             })
         };
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium };
-
-        var dialog = DialogService.Show<ProjectEdit>("Edit Project", parameters, options);
+        var dialog = await DialogService.ShowAsync<ProjectEdit>("Edit project", parameters, options);
     }
 
     private void InfoProject(Guid projectId)

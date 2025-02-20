@@ -3,8 +3,8 @@
 public class ProjectModel
 {
     public Guid ProjectId { get; set; }
-    public string ProjectName { get; set; }
-    public string? ProjectDescription { get; set; }
-    public DateTime? StartDate { get; set; }
-    public DateTime? FinishDate { get; set; }
+    public string ProjectName { get; set; } = string.Empty;
+    public string? ProjectDescription { get; set; } = null;
+    public DateTime? StartDate { get; set; } = null;
+    public DateTime? FinishDate { get; set; } = null;
 }

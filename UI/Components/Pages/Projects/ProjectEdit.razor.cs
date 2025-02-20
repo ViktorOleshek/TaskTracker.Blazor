@@ -1,6 +1,7 @@
 ﻿using Domain.Models.Project;
 using Domain.Models.Project.Update;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.JsonPatch;
 using MudBlazor;
 using Services.ExternalApi;
@@ -18,6 +19,13 @@ public partial class ProjectEdit
     private MudForm? projectForm;
     private string? ErrorMessage = null;
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (Project == null)
+        {
+            Project = new ProjectModel();
+        }
+    }
     private async Task<bool> ValidateFormAsync()
     {
         if (projectForm is not null)
