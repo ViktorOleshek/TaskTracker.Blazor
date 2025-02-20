@@ -59,16 +59,17 @@ public partial class ProjectsList
 
     private async Task EditProject(ProjectModel project)
     {
-        var parameters = new DialogParameters { ["Project"] = project };
+        var parameters = new DialogParameters
+        {
+            ["Project"] = project,
+            ["OnProjectUpdated"] = EventCallback.Factory.Create<ProjectModel>(this, async (_) =>
+            {
+                StateHasChanged();
+            })
+        };
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium };
 
         var dialog = DialogService.Show<ProjectEdit>("Edit Project", parameters, options);
-        var result = await dialog.Result;
-
-        if (!result.Canceled)
-        {
-            await LoadProjects();
-        }
     }
 
     private void InfoProject(Guid projectId)

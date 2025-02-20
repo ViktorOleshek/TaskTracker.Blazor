@@ -10,6 +10,7 @@ namespace UI.Components.Pages.Projects;
 public partial class ProjectEdit
 {
     [Parameter] public ProjectModel? Project { get; set; }
+    [Parameter] public EventCallback<ProjectModel> OnProjectUpdated { get; set; }
     [Inject] private IApiFacade ApiFacade { get; set; } = default!;
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
 
@@ -46,7 +47,8 @@ public partial class ProjectEdit
         var updateResponse = await ApiFacade.Project.UpdateProjectAsync(Project.ProjectId, patchDoc);
         if (updateResponse.IsSuccessStatusCode)
         {
-            MudDialog.Close(DialogResult.Ok(Project));
+            await OnProjectUpdated.InvokeAsync(Project);
+            MudDialog.Close();
         }
         else
         {
