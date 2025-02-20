@@ -8,7 +8,7 @@ namespace Services.ExternalApi;
 public interface IProjectService
 {
     [Post("/project")]
-    Task<IApiResponse<Guid>> CreateProjectAsync([Body] CreateProjectDTO dto);
+    Task<IApiResponse<Guid>> CreateProjectAsync([Body] ProjectModel dto);
 
     [Get("/project/user-projects")]
     Task<IApiResponse<IEnumerable<ProjectModel>>> GetUserProjectsAsync();
