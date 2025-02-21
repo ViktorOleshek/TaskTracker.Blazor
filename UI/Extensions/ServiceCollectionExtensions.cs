@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Serialization;
 using Refit;
 using Services.ExternalApi;
+using System.Net.Http.Headers;
 
 namespace UI.Extensions;
 
@@ -22,13 +23,22 @@ public static class ServiceCollectionExtensions
                 })
         };
 
+        // Додаємо IHttpContextAccessor
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+        // Реєструємо кастомний обробник токену
+        services.AddScoped<TokenHttpMessageHandler>();
+
+        // Налаштовуємо HttpClient з кастомним обробником
         services.AddHttpClient("TaskTrackerApi", client =>
         {
             client.BaseAddress = new Uri(settings!.BaseAddress);
             client.DefaultRequestHeaders.Accept.Add(
-                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json-patch+json"));
-        });
+                new MediaTypeWithQualityHeaderValue("application/json-patch+json"));
+        })
+        .AddHttpMessageHandler<TokenHttpMessageHandler>(); // Додаємо кастомний обробник
 
+        // Реєструємо сервіси для роботи з API через Refit
         services.AddScoped<IAuthService>(sp =>
         {
             var httpClient = sp.GetRequiredService<IHttpClientFactory>()

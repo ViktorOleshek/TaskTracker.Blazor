@@ -37,7 +37,7 @@ public partial class Login : ComponentBase
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("Login successful!");
-            NavigationManager.NavigateTo("/profile");
+            NavigationManager.NavigateTo($"/set-token?AuthToken={response.Content.Token}", true);
         }
         else
         {
