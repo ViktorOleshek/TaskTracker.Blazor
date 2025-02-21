@@ -50,14 +50,31 @@ public partial class ProjectsList
         var parameters = new DialogParameters
         {
             ["Project"] = project,
-            ["OnProjectUpdated"] = EventCallback.Factory.Create<ProjectModel>(this, async (_) =>
+            ["OnProjectUpdated"] = EventCallback.Factory.Create<ProjectModel>(this, async (updatedProject) =>
             {
+                UpdateProjectList(updatedProject);
                 StateHasChanged();
             })
         };
         string title = project == null ? "Add project" : "Edit project";
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium };
         var dialog = await DialogService.ShowAsync<AddOrEditProject>(title, parameters, options);
+    }
+    private void UpdateProjectList(ProjectModel updatedProject)
+    {
+        if (updatedProject.ProjectId == null)
+            return;
+
+        var existingProject = projects.FirstOrDefault(p => p.ProjectId == updatedProject.ProjectId);
+
+        if (existingProject == null)
+        {
+            projects.Add(updatedProject);
+            return;
+        }
+
+        var index = projects.IndexOf(existingProject);
+        projects [index] = updatedProject;
     }
 
     private void InfoProject(Guid projectId)
