@@ -38,6 +38,8 @@ public partial class Profile
 
     private async Task ShowDialog<TDialog>(string title) where TDialog : ComponentBase
     {
+        errorMessage = null;
+
         var type = title.ToLower();
         var dialog = await DialogService.ShowAsync<TDialog>("", defaultOptions);
         var result = await dialog.Result;
@@ -49,7 +51,6 @@ public partial class Profile
 
         if (result.Data is bool success && success)
         {
-            errorMessage = null;
             await DialogService.ShowMessageBox(
                 "Success",
                 $"{title} changed successfully!",
@@ -59,6 +60,8 @@ public partial class Profile
             {
                 await LoadUserData();
             }
+
+            return;
         }
 
         errorMessage = $"Failed to change {type}";

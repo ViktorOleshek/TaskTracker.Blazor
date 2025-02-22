@@ -5,11 +5,15 @@
 	<MudCard>
 		<MudCardHeader>
 			<MudText Typo=@Typo.h4>Projects</MudText>
+
 			<MudSpacer />
-			<MudButton Color=@Color.Primary OnClick="() => AddOrEditProject(null)">
+
+			<MudButton Color=@Color.Primary
+					   OnClick="() => AddOrEditProject(null)">
 				<MudIcon Icon=@Icons.Material.Filled.Add /> Add Project
 			</MudButton>
 		</MudCardHeader>
+
 		<MudCardContent>
 			<MudTable Items="projects" Hover="true" Striped="true" Dense="true">
 				<HeaderContent>
@@ -18,6 +22,7 @@
 					<MudTh>Finish Date</MudTh>
 					<MudTh>Actions</MudTh>
 				</HeaderContent>
+
 				<RowTemplate Context="project">
 					<MudTd>@project.ProjectName</MudTd>
 					<MudTd>@(project?.StartDate?.ToShortDateString() ?? "—")</MudTd>
@@ -37,6 +42,7 @@
 					</MudTd>
 				</RowTemplate>
 			</MudTable>
+
 			<MudTablePagination RowsPerPageString="Rows per page" />
 		</MudCardContent>
 	</MudCard>

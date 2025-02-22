@@ -1,6 +1,7 @@
 ﻿using Domain.Models.Account.Login;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Services.ExternalApi;
 
 namespace UI.Components.Pages.Authen;
 
@@ -11,6 +12,11 @@ public partial class Login : ComponentBase
     private string? errorMessage;
     private bool isSubmitting = false;
     private MudForm? loginForm;
+
+    [Inject]
+    private IApiFacade ApiFacade { get; set; } = default!;
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
 
     private async Task<bool> ValidateFormAsync()
     {

@@ -10,57 +10,47 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
     {
-        var settings = configuration.GetSection(TaskTrackerSettings.ConfigurationSection)
-            .Get<TaskTrackerSettings>();
-
-        var refitSettings = new RefitSettings
-        {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(
-                new JsonSerializerSettings
-                {
-                    ContractResolver = new DefaultContractResolver(),
-                    NullValueHandling = NullValueHandling.Ignore
-                })
-        };
-
-        // Додаємо IHttpContextAccessor
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-        // Реєструємо кастомний обробник токену
         services.AddScoped<TokenHttpMessageHandler>();
 
-        // Налаштовуємо HttpClient з кастомним обробником
+        var settings = configuration
+                        .GetSection(TaskTrackerSettings.ConfigurationSection)
+                        .Get<TaskTrackerSettings>();
         services.AddHttpClient("TaskTrackerApi", client =>
         {
             client.BaseAddress = new Uri(settings!.BaseAddress);
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json-patch+json"));
         })
-        .AddHttpMessageHandler<TokenHttpMessageHandler>(); // Додаємо кастомний обробник
+                .AddHttpMessageHandler<TokenHttpMessageHandler>();
 
-        // Реєструємо сервіси для роботи з API через Refit
-        services.AddScoped<IAuthService>(sp =>
+        var refitSettings = new RefitSettings
         {
-            var httpClient = sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient("TaskTrackerApi");
-            return RestService.For<IAuthService>(httpClient, refitSettings);
-        });
-
-        services.AddScoped<IUserService>(sp =>
-        {
-            var httpClient = sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient("TaskTrackerApi");
-            return RestService.For<IUserService>(httpClient, refitSettings);
-        });
-
-        services.AddScoped<IProjectService>(sp =>
-        {
-            var httpClient = sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient("TaskTrackerApi");
-            return RestService.For<IProjectService>(httpClient, refitSettings);
-        });
+            ContentSerializer = new NewtonsoftJsonContentSerializer(
+                    new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver(),
+                        NullValueHandling = NullValueHandling.Ignore
+                    })
+        };
+        services.AddRefitService<IAuthService>(refitSettings);
+        services.AddRefitService<IUserService>(refitSettings);
+        services.AddRefitService<IProjectService>(refitSettings);
 
         services.AddScoped<IApiFacade, ApiFacade>();
+
+        return services;
+    }
+    private static IServiceCollection AddRefitService<T>(this IServiceCollection services, RefitSettings settings)
+        where T : class
+    {
+        services.AddScoped<T>(sp =>
+        {
+            var httpClient = sp.GetRequiredService<IHttpClientFactory>()
+                .CreateClient("TaskTrackerApi");
+            return RestService.For<T>(httpClient, settings);
+        });
 
         return services;
     }

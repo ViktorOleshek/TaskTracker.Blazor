@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.JsonPatch;
 using MudBlazor;
 using Refit;
 using Services.ExternalApi;
-using System.Net;
 
 namespace UI.Components.Pages.Projects;
 
@@ -40,6 +39,7 @@ public partial class AddOrEditProject
             await projectForm.Validate();
             return projectForm.IsValid;
         }
+
         return false;
     }
 
@@ -78,16 +78,24 @@ public partial class AddOrEditProject
         var patchDoc = new JsonPatchDocument<ProjectModel>();
 
         if (Project.ProjectName != originalProject.ProjectName)
+        {
             patchDoc.Replace(p => p.ProjectName, Project.ProjectName);
+        }
 
         if (Project.ProjectDescription != originalProject.ProjectDescription)
+        {
             patchDoc.Replace(p => p.ProjectDescription, Project.ProjectDescription);
+        }
 
         if (Project.StartDate != originalProject.StartDate)
+        {
             patchDoc.Replace(p => p.StartDate, Project.StartDate);
+        }
 
         if (Project.FinishDate != originalProject.FinishDate)
+        {
             patchDoc.Replace(p => p.FinishDate, Project.FinishDate);
+        }
 
         return patchDoc.Operations.Any()
             ? await ApiFacade.Project.UpdateProjectAsync(Project.ProjectId!.Value, patchDoc)

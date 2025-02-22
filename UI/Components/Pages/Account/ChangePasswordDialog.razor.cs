@@ -24,6 +24,7 @@ public partial class ChangePasswordDialog
         if (response.IsSuccessStatusCode)
         {
             MudDialog?.Close(DialogResult.Ok(true));
+            return;
         }
 
         MudDialog?.Close(DialogResult.Ok(false));

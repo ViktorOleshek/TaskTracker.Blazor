@@ -1,6 +1,9 @@
 ﻿<MudDialog>
 	<DialogContent>
-		<MudForm Model="@Project" Validation="Validator.ValidateValue" @ref=@projectForm>
+		<MudForm Model="@Project"
+				 Validation="Validator.ValidateValue"
+				 @ref=@projectForm>
+
 			<MudTextField Label="Project Name"
 						  @bind-Value=@Project.ProjectName
 						  For="@(() => Project.ProjectName)"
@@ -14,7 +17,7 @@
 
 			<MudDatePicker Label="Start Date"
 						   @bind-Date=@Project.StartDate
-						   For="@(() => Project.StartDate)"	
+						   For="@(() => Project.StartDate)"
 						   ShowWeekNumbers="true"
 						   DateFormat="dd.MM.yyyy"
 						   Required="true"
@@ -29,7 +32,10 @@
 
 			@if (!string.IsNullOrEmpty(ErrorMessage))
 			{
-				<MudAlert Severity=@Severity.Error Dense="true" Elevation="0" Class="mt-4">
+				<MudAlert Severity=@Severity.Error
+						  Dense="true"
+						  Elevation="0"
+						  Class="mt-4">
 					@ErrorMessage
 				</MudAlert>
 			}
@@ -37,7 +43,14 @@
 	</DialogContent>
 
 	<DialogActions>
-		<MudButton OnClick=@SaveProject Color=@Color.Primary>Save</MudButton>
-		<MudButton OnClick=@CloseDialog Color=@Color.Secondary>Cancel</MudButton>
+		<MudButton OnClick=@SaveProject
+				   Color=@Color.Primary>
+			Save
+		</MudButton>
+
+		<MudButton OnClick=@CloseDialog
+				   Color=@Color.Secondary>
+			Cancel
+		</MudButton>
 	</DialogActions>
 </MudDialog>
