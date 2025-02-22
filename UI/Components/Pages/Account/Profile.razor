@@ -1,0 +1,39 @@
+﻿@page "/profile"
+@rendermode InteractiveServer
+@using Domain.DTOs
+@using Domain.DTOs.Users.ChangePassword
+@using Services.ExternalApi
+
+<MudContainer MaxWidth=@MaxWidth.Medium>
+	<MudCard Class="pa-6">
+		<MudCardHeader>
+			<MudText Typo=@Typo.h4>@user?.Login</MudText>
+		</MudCardHeader>
+
+		<MudCardContent>
+			<MudText Typo=@Typo.body1>Email: @user?.Email</MudText>
+
+			<MudDivider Class="my-4" />
+
+			<MudButton Color=@Color.Primary
+					   Variant=@Variant.Outlined
+					   OnClick="@(() => ShowDialog<ChangePasswordDialog>("Password"))">
+				Change Password
+			</MudButton>
+
+			<MudButton Color=@Color.Secondary
+					   Variant=@Variant.Outlined
+					   OnClick="@(() => ShowDialog<ChangeEmailDialog>("Email"))"
+					   Class="ml-2">
+				Change Email
+			</MudButton>
+
+			@if (!string.IsNullOrEmpty(errorMessage))
+			{
+				<MudAlert Severity=@Severity.Error
+						  Class="mt-3" />
+				@errorMessage
+			}
+		</MudCardContent>
+	</MudCard>
+</MudContainer>

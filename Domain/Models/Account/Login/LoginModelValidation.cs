@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+﻿using Domain.Extensions;
+using FluentValidation;
 
-namespace Domain.Models.Account;
+namespace Domain.Models.Account.Login;
 
 public class LoginModelValidation : AbstractValidator<LoginModel>
 {
@@ -8,11 +9,7 @@ public class LoginModelValidation : AbstractValidator<LoginModel>
     {
         RuleFor(x => x.Login).NotEmpty();
 
-        RuleFor(x => x.Password)
-            .NotEmpty()
-            .MinimumLength(5).MaximumLength(10)
-            .Matches(@"[A-Z]+").Matches(@"[a-z]+")
-            .Matches(@"[0-9]+").Matches(@"[\@\!\?\.\*]+");
+        RuleFor(x => x.Password).ApplyPasswordRules();
     }
 
     public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>

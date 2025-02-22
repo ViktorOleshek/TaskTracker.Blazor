@@ -1,8 +1,9 @@
-﻿using Domain.Models.Account;
+﻿using Domain.Models.Account.Login;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Services.ExternalApi;
 
-namespace UI.Components.Pages.Account;
+namespace UI.Components.Pages.Authen;
 
 public partial class Login : ComponentBase
 {
@@ -11,6 +12,11 @@ public partial class Login : ComponentBase
     private string? errorMessage;
     private bool isSubmitting = false;
     private MudForm? loginForm;
+
+    [Inject]
+    private IApiFacade ApiFacade { get; set; } = default!;
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
 
     private async Task<bool> ValidateFormAsync()
     {
@@ -32,12 +38,12 @@ public partial class Login : ComponentBase
 
         isSubmitting = true;
 
-        var response = await AuthService.LoginAsync(loginModel);
+        var response = await ApiFacade.Auth.LoginAsync(loginModel);
 
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("Login successful!");
-            NavigationManager.NavigateTo("/dashboard");
+            NavigationManager.NavigateTo($"/set-token?AuthToken={response.Content.Token}", true);
         }
         else
         {

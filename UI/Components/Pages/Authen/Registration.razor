@@ -1,0 +1,74 @@
+﻿@page "/register"
+@rendermode InteractiveServer
+
+<div class="row">
+	<div class="ma-6 d-flex justify-center">
+		<MudCard Width="500px">
+			<MudCardHeader Class="d-flex justify-center ">
+				<MudText Typo=@Typo.h6>Account Registration</MudText>
+			</MudCardHeader>
+
+			<MudForm Model=@model
+					 Validation=@registerModelValidation.ValidateValue
+					 @ref=@registractionForm>
+
+				<MudCardContent>
+					<MudTextField Label="Fullname"
+								  @bind-Value=@model.Login
+								  For="@(() => model.Login)"
+								  Immediate="true"
+								  Required="true" />
+
+					<MudTextField Label="Email Address"
+								  @bind-Value=@model.Email
+								  For="@(() => model.Email)"
+								  Immediate="true"
+								  InputType=@InputType.Email
+								  Required="true" />
+
+					<MudTextField Label="Password"
+								  @bind-Value=@model.Password
+								  For="@(() => model.Password)"
+								  Immediate="true"
+								  InputType=@InputType.Password
+								  Required="true" />
+
+					<MudTextField Label="Confirm Password"
+								  @bind-Value=@model.ConfirmPassword
+								  For="@(() => model.ConfirmPassword)"
+								  Immediate="true"
+								  InputType=@InputType.Password
+								  Required="true" />
+				</MudCardContent>
+
+				<MudCardActions>
+					<MudButton Variant=@Variant.Filled
+							   Color=@Color.Secondary
+							   Class="ml-auto"
+							   ButtonType=@ButtonType.Button
+							   OnClick=@HandleRegister
+							   Disabled=@isSubmitting>
+						@if (isSubmitting)
+						{
+							<MudProgressCircular Size=@Size.Small
+												 Indeterminate="true" />
+						}
+						else
+						{
+							<text>Register</text>
+						}
+					</MudButton>
+				</MudCardActions>
+
+				@if (!string.IsNullOrEmpty(errorMessage))
+				{
+					<MudAlert Severity=@Severity.Error
+							  Dense="true"
+							  Elevation="0">
+						@errorMessage
+					</MudAlert>
+				}
+			</MudForm>
+		</MudCard>
+	</div>
+</div>

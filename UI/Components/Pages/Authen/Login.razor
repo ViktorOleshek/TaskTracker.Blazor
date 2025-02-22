@@ -1,0 +1,61 @@
+﻿@page "/login"
+@rendermode InteractiveServer
+
+<MudPaper Class="pa-4" MaxWidth="xs">
+	<MudCardHeader Class="d-flex justify-center ">
+		<MudText Typo=@Typo.h6>Login</MudText>
+	</MudCardHeader>
+
+	<MudForm Model=@loginModel
+			 Validation=@loginModelValidation.ValidateValue
+			 @ref=@loginForm>
+
+		<MudCardContent>
+			<MudTextField Label="Login"
+						  @bind-Value=@loginModel.Login
+						  For="@(() => loginModel.Login)"
+						  Variant=@Variant.Outlined
+						  Margin=@Margin.Normal
+						  Required="true" />
+
+			<MudTextField Label="Password"
+						  @bind-Value=@loginModel.Password
+						  For="@(() => loginModel.Password)"
+						  Variant=@Variant.Outlined
+						  Margin=@Margin.Normal
+						  InputType=@InputType.Password
+						  Required="true" />
+		</MudCardContent>
+
+		<MudCardActions>
+			<MudButton Type="Submit"
+					   Variant=@Variant.Filled
+					   Color=@Color.Primary
+					   Class="ml-auto"
+					   ButtonType=@ButtonType.Button
+					   FullWidth="true"
+					   OnClick=@HandleLogin
+					   Disabled=@isSubmitting>
+				@if (isSubmitting)
+				{
+					<MudProgressCircular Size=@Size.Small
+										 Indeterminate="true" />
+				}
+				else
+				{
+					<text>Login</text>
+				}
+			</MudButton>
+		</MudCardActions>
+
+		@if (!string.IsNullOrEmpty(errorMessage))
+		{
+			<MudAlert Severity=@Severity.Error
+					  Dense="true"
+					  Elevation="0"
+					  Class="mt-4">
+				@errorMessage
+			</MudAlert>
+		}
+	</MudForm>
+</MudPaper>
